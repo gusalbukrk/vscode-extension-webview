@@ -8,19 +8,25 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "first-extension" is now active!');
+	console.log('log from inside `activate` function.');
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('first-extension.helloWorld', () => {
 		// The code you place here will be executed every time your command is executed
+
+		console.log('log from inside `helloWorld` command implementation.')
+
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from First extension!');
+		const msg = 'Hello World from First extension!';
+		vscode.window.showInformationMessage(msg);
 	});
 
 	context.subscriptions.push(disposable);
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+	console.log('log from inside `deactivate` function.');
+}
