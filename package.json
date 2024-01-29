@@ -16,6 +16,10 @@
       {
         "command": "first-extension.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "first-extension.another",
+        "title": "Another"
       }
     ]
   },

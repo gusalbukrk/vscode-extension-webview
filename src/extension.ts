@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('first-extension.helloWorld', () => {
+	let disposable1 = vscode.commands.registerCommand('first-extension.helloWorld', () => {
 		// The code you place here will be executed every time your command is executed
 
 		console.log('log from inside `helloWorld` command implementation.')
@@ -23,7 +23,16 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage(msg);
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(disposable1);
+
+	let disposable2 = vscode.commands.registerCommand('first-extension.another', () => {
+		console.log('log from inside `another` command implementation.')
+
+		// Display a message box to the user
+		const msg = 'meh...';
+		vscode.window.showErrorMessage(msg);
+	});
+	context.subscriptions.push(disposable2);
 }
 
 // This method is called when your extension is deactivated
