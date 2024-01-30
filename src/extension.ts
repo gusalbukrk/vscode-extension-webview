@@ -61,14 +61,25 @@ export function activate(context: vscode.ExtensionContext) {
 						vscode.ViewColumn.One, // Editor column to show the new webview panel in.
 						{
 							enableScripts: true,
-						} // Webview options. More on these later.
+
+							// root paths from which the webview can load local resources using `asWebviewUri`
+							// default is current workspace and extension's install directory
+							// to disallow all local resources, just set to an empty array
+							localResourceRoots: [vscode.Uri.joinPath(context.extensionUri, 'src')],
+						},
 					);
+
+					// to load resources or any content from the user's current workspace
+					// you must use the Webview.asWebviewUri function to convert a local `file:` URI
+					// into a special URI that VS Code can use to load a subset of local resources
+					const path = vscode.Uri.joinPath(context.extensionUri, 'src', 'cat.gif');
+					const uri = currentPanel.webview.asWebviewUri(path);
 
 					// https://code.visualstudio.com/api/extension-guides/webview#updating-webview-content
 					let iteration = 0;
 					const updateWebview = () => { // will keep running even after panel is closed
 						console.log('from `updateWebview`');
-						currentPanel!.webview.html = getWebviewContent(iteration++ % 2 ? 'compiling' : 'coding');
+						currentPanel!.webview.html = getWebviewContent(iteration++ % 2 ? 'compiling' : 'coding', uri);
 					};
 					//
 					// Set initial content
@@ -104,7 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable3);
 }
 
-function getWebviewContent(activity: string) {
+function getWebviewContent(activity: string, imgSrc: vscode.Uri) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,7 +125,8 @@ function getWebviewContent(activity: string) {
 </head>
 <body>
 		<h1>${activity}</h1>
-    <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
+    <!-- <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" /> -->
+    <img src="${imgSrc}" width="300" />
 		<script>
 			// to see log output, open the developer tools in VS Code using
 			// 'Developer: Toggle Developer Tools' command;
