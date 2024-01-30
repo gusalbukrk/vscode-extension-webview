@@ -178,6 +178,21 @@ function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vs
 			let x = 13;
 			console.log(x);
 
+			const vscode = acquireVsCodeApi();
+
+			// https://code.visualstudio.com/api/extension-guides/webview#persistence
+			// webviews contents are created when the webview becomes visible and destroyed
+			// when moved into the background; any state inside the webview will be lost
+			// when the webview is moved to a background tab;
+			// webview can use the getState and setState methods
+			// to save off and restore a JSON serializable state object;
+			// an alternative is 'retainContextWhenHidden' which is much heavier and should only be used in extensions with complex state
+			// https://code.visualstudio.com/api/extension-guides/webview#retaincontextwhenhidden
+			if (vscode.getState() === undefined) vscode.setState({ title: 'coding' })
+			
+			// this line will make sure to display the correct title after regained focus
+			document.querySelector('h1').textContent = vscode.getState().title;
+
 			// handle the message inside the webview
 			window.addEventListener('message', event => {
 
@@ -185,7 +200,8 @@ function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vs
 
 					switch (message.command) {
 							case 'refactor':
-								document.querySelector('h1').textContent += '!';
+								vscode.setState({ title: vscode.getState().title + '!' });
+								document.querySelector('h1').textContent = vscode.getState().title;
 					}
 			});
 
