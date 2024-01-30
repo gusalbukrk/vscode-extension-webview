@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 			// https://code.visualstudio.com/api/extension-guides/webview#updating-webview-content
       let iteration = 0;
       const updateWebview = () => { // will keep running even after panel is closed
-				console.log('from `updateWebview');
+				console.log('from `updateWebview`');
         panel.webview.html = getWebviewContent(iteration++ % 2 ? 'compiling' : 'coding');
       };
 			//
@@ -55,7 +55,20 @@ export function activate(context: vscode.ExtensionContext) {
       updateWebview();
 			//
       // And schedule updates to the content every second
-      setInterval(updateWebview, 1000);
+      const interval = setInterval(updateWebview, 1000);
+
+			// https://code.visualstudio.com/api/extension-guides/webview#lifecycle
+      panel.onDidDispose(
+        () => {
+          // When the panel is closed, cancel any future updates to the webview content
+          clearInterval(interval);
+        },
+        null,
+        context.subscriptions
+      );
+
+			// it's also possible to programmatically close webviews by calling dispose() on them
+			// panel.dispose();
     });
 
 	context.subscriptions.push(disposable3);
