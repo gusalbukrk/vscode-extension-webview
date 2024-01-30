@@ -159,7 +159,7 @@ function getWebviewContent(activity: string, imgSrc: vscode.Uri) {
 						e.stopPropagation();
 				})(event)'>Create</button>
 
-		<script>
+		<script type="module">
 			// to see log output, open the developer tools in VS Code using
 			// 'Developer: Toggle Developer Tools' command;
 			// to be able to evaluate a expression in the context of the webview
@@ -178,6 +178,10 @@ function getWebviewContent(activity: string, imgSrc: vscode.Uri) {
 								document.querySelector('h1').textContent += '!';
 					}
 			});
+
+			const article = await (await fetch('https://jsonplaceholder.typicode.com/posts/1')).json();
+			console.log(article);
+			console.log('!!!');
 		</script>
 </body>
 </html>`;
