@@ -122,6 +122,15 @@ function getWebviewContent(activity: string, imgSrc: vscode.Uri) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cat Coding</title>
+		<style>
+		 	/* https://code.visualstudio.com/api/extension-guides/webview#theming-webview-content */
+			/* webview can use CSS to change their appearance based on VS Code's current theme */
+			/* VS Code groups themes into three categories */
+			/* and adds a special class to the body element to indicate the current theme  */
+			body.vscode-light { background-color: lightblue; }
+			body.vscode-dark { background-color: blue; }
+			body.vscode-high-contrast { background-color: white; }
+		</style>
 </head>
 <body>
 		<h1>${activity}</h1>
