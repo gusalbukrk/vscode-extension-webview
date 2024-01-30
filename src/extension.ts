@@ -124,7 +124,34 @@ export function activate(context: vscode.ExtensionContext) {
       // you can send any JSON serializable data.
       currentPanel.webview.postMessage({ command: 'refactor' });
     });
-	context.subscriptions.push(disposable3);
+	context.subscriptions.push(disposable4);
+
+	// https://code.visualstudio.com/api/extension-guides/webview#serialization
+	// with it, webviews can be automatically restored when VS Code restarts
+	//
+	// make sure we register a serializer in activation event
+	if (vscode.window.registerWebviewPanelSerializer) {
+		vscode.window.registerWebviewPanelSerializer('catCoding', {
+			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+				console.warn(`Got state: ${JSON.stringify(state)}`);
+
+				webviewPanel.webview.html = getWebviewContent(
+					webviewPanel.webview,
+					'coding',
+					webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'src', 'cat.gif')),
+				);
+				currentPanel = webviewPanel;
+
+				currentPanel.onDidDispose(
+					() => {
+						currentPanel = undefined;
+					},
+					null,
+					context.subscriptions
+				);
+			}
+		});
+	}
 }
 
 function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vscode.Uri) {
