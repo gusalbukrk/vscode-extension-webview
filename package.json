@@ -47,6 +47,11 @@
         "command": "catCoding.insertLion",
         "title": "Insert 🦁",
         "category": "Cat Coding"
+      },
+      {
+        "command": "catCoding.doRefactor",
+        "title": "Do some refactoring",
+        "category": "Cat Coding"
       }
     ]
   },

@@ -113,6 +113,18 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
 	context.subscriptions.push(disposable3);
+
+	// https://code.visualstudio.com/api/extension-guides/webview#passing-messages-from-a-webview-to-an-extension
+	let disposable4 = vscode.commands.registerCommand('catCoding.doRefactor', () => {
+      if (!currentPanel) {
+        return;
+      }
+
+      // send a message to our webview.
+      // you can send any JSON serializable data.
+      currentPanel.webview.postMessage({ command: 'refactor' });
+    });
+	context.subscriptions.push(disposable3);
 }
 
 function getWebviewContent(activity: string, imgSrc: vscode.Uri) {
@@ -155,6 +167,17 @@ function getWebviewContent(activity: string, imgSrc: vscode.Uri) {
 			// you need to change the JavaScript context from 'top' (default) to 'pending-frame (index.html)'
 			let x = 13;
 			console.log(x);
+
+			// handle the message inside the webview
+			window.addEventListener('message', event => {
+
+					const message = event.data; // The JSON data our extension sent
+
+					switch (message.command) {
+							case 'refactor':
+								document.querySelector('h1').textContent += '!';
+					}
+			});
 		</script>
 </body>
 </html>`;
