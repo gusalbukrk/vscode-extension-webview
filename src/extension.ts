@@ -79,7 +79,7 @@ export function activate(context: vscode.ExtensionContext) {
 					let iteration = 0;
 					const updateWebview = () => { // will keep running even after panel is closed
 						console.log('from `updateWebview`');
-						currentPanel!.webview.html = getWebviewContent(iteration++ % 2 ? 'compiling' : 'coding', uri);
+						currentPanel!.webview.html = getWebviewContent(currentPanel!.webview, iteration++ % 2 ? 'compiling' : 'coding', uri);
 					};
 					//
 					// Set initial content
@@ -127,11 +127,21 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable3);
 }
 
-function getWebviewContent(activity: string, imgSrc: vscode.Uri) {
+function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vscode.Uri) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+		
+		<!-- https://code.visualstudio.com/api/extension-guides/webview#content-security-policy -->
+		<!-- "default-src 'none';" disallows all content, the directives afterwards -->
+		<!-- allow loading local scripts and stylesheets and loading images over https -->
+		<!-- it also implicitly disables inline scripts and styles -->
+		<!-- <meta
+			http-equiv="Content-Security-Policy"
+			content="default-src 'none'; img-src ${webview.cspSource} https:; script-src ${webview.cspSource}; style-src ${webview.cspSource};"
+		/> -->
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cat Coding</title>
 		<style>
