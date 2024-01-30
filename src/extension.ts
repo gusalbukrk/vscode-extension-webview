@@ -89,15 +89,15 @@ export function activate(context: vscode.ExtensionContext) {
 					// const interval = setInterval(updateWebview, 1000);
 
 					// https://code.visualstudio.com/api/extension-guides/webview#lifecycle
-					// currentPanel.onDidDispose(
-					// 	() => {
-					// 		// When the panel is closed, cancel any future updates to the webview content
-					// 		clearInterval(interval);
-					// 		currentPanel = undefined;
-					// 	},
-					// 	null,
-					// 	context.subscriptions
-					// );
+					currentPanel.onDidDispose(
+						() => {
+							// When the panel is closed, cancel any future updates to the webview content
+							// clearInterval(interval);
+							currentPanel = undefined;
+						},
+						null,
+						context.subscriptions
+					);
 
 					// it's also possible to programmatically close webviews by calling dispose() on them
 					// panel.dispose();
