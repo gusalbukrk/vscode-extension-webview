@@ -44,7 +44,18 @@ export function activate(context: vscode.ExtensionContext) {
         {} // Webview options. More on these later.
       );
 
-			panel.webview.html = getWebviewContent('coding');
+			// https://code.visualstudio.com/api/extension-guides/webview#updating-webview-content
+      let iteration = 0;
+      const updateWebview = () => { // will keep running even after panel is closed
+				console.log('from `updateWebview');
+        panel.webview.html = getWebviewContent(iteration++ % 2 ? 'compiling' : 'coding');
+      };
+			//
+      // Set initial content
+      updateWebview();
+			//
+      // And schedule updates to the content every second
+      setInterval(updateWebview, 1000);
     });
 
 	context.subscriptions.push(disposable3);
