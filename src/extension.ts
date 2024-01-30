@@ -59,7 +59,9 @@ export function activate(context: vscode.ExtensionContext) {
 						'catCoding', // Identifies the type of the webview. Used internally
 						'Cat Coding', // Title of the panel displayed to the user
 						vscode.ViewColumn.One, // Editor column to show the new webview panel in.
-						{} // Webview options. More on these later.
+						{
+							enableScripts: true,
+						} // Webview options. More on these later.
 					);
 
 					// https://code.visualstudio.com/api/extension-guides/webview#updating-webview-content
@@ -73,18 +75,18 @@ export function activate(context: vscode.ExtensionContext) {
 					updateWebview();
 					//
 					// And schedule updates to the content every second
-					const interval = setInterval(updateWebview, 1000);
+					// const interval = setInterval(updateWebview, 1000);
 
 					// https://code.visualstudio.com/api/extension-guides/webview#lifecycle
-					currentPanel.onDidDispose(
-						() => {
-							// When the panel is closed, cancel any future updates to the webview content
-							clearInterval(interval);
-							currentPanel = undefined;
-						},
-						null,
-						context.subscriptions
-					);
+					// currentPanel.onDidDispose(
+					// 	() => {
+					// 		// When the panel is closed, cancel any future updates to the webview content
+					// 		clearInterval(interval);
+					// 		currentPanel = undefined;
+					// 	},
+					// 	null,
+					// 	context.subscriptions
+					// );
 
 					// it's also possible to programmatically close webviews by calling dispose() on them
 					// panel.dispose();
@@ -113,6 +115,15 @@ function getWebviewContent(activity: string) {
 <body>
 		<h1>${activity}</h1>
     <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
+		<script>
+			// to see log output, open the developer tools in VS Code using
+			// 'Developer: Toggle Developer Tools' command;
+			// to be able to evaluate a expression in the context of the webview
+			// (to, for instance, use the 'x' variable defined below)
+			// you need to change the JavaScript context from 'top' (default) to 'pending-frame (index.html)'
+			let x = 13;
+			console.log(x);
+		</script>
 </body>
 </html>`;
 }
