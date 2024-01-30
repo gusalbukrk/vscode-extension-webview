@@ -12,6 +12,18 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "menus": {
+      "webview/context": [
+        {
+          "command": "catCoding.yarn",
+          "when": "webviewId == 'catCoding'"
+        },
+        {
+          "command": "catCoding.insertLion",
+          "when": "webviewId == 'catCoding' && webviewSection == 'editor'"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "first-extension.helloWorld",
@@ -24,6 +36,16 @@
       {
         "command": "catCoding.start",
         "title": "Start new cat coding session",
+        "category": "Cat Coding"
+      },
+      {
+        "command": "catCoding.yarn",
+        "title": "Yarn 🧶",
+        "category": "Cat Coding"
+      },
+      {
+        "command": "catCoding.insertLion",
+        "title": "Insert 🦁",
         "category": "Cat Coding"
       }
     ]

@@ -135,7 +135,18 @@ function getWebviewContent(activity: string, imgSrc: vscode.Uri) {
 <body>
 		<h1>${activity}</h1>
     <!-- <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" /> -->
-    <img src="${imgSrc}" width="300" />
+    <img src="${imgSrc}" width="200" /><br />
+
+		<!-- if 'preventDefaultContextMenuItems' were set to false,
+		custom menu itens will appear below default menu itens (cut, copy, paste) -->
+		<textarea data-vscode-context='{"webviewSection": "editor", "preventDefaultContextMenuItems": true}'></textarea>
+
+		<button data-vscode-context='{"preventDefaultContextMenuItems": true }' onClick='((e) => {
+						e.preventDefault();
+						e.target.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, clientX: e.clientX, clientY: e.clientY }));
+						e.stopPropagation();
+				})(event)'>Create</button>
+
 		<script>
 			// to see log output, open the developer tools in VS Code using
 			// 'Developer: Toggle Developer Tools' command;
