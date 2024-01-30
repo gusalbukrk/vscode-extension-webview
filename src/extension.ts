@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let disposable1 = vscode.commands.registerCommand('first-extension.helloWorld', () => {
 		// The code you place here will be executed every time your command is executed
 
-		console.log('log from inside `helloWorld` command implementation.')
+		console.log('log from inside `helloWorld` command implementation.');
 
 		// Display a message box to the user
 		const msg = 'Hello World from First extension!';
@@ -26,13 +26,43 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable1);
 
 	let disposable2 = vscode.commands.registerCommand('first-extension.another', () => {
-		console.log('log from inside `another` command implementation.')
+		console.log('log from inside `another` command implementation.');
 
 		// Display a message box to the user
 		const msg = 'meh...';
 		vscode.window.showErrorMessage(msg);
 	});
 	context.subscriptions.push(disposable2);
+
+	// https://code.visualstudio.com/api/extension-guides/webview#webviews-api-basics
+	let disposable3 = vscode.commands.registerCommand('catCoding.start', () => {
+      // Create and show a new webview
+      const panel = vscode.window.createWebviewPanel(
+        'catCoding', // Identifies the type of the webview. Used internally
+        'Cat Coding', // Title of the panel displayed to the user
+				vscode.ViewColumn.One, // Editor column to show the new webview panel in.
+        {} // Webview options. More on these later.
+      );
+
+			panel.webview.html = getWebviewContent('coding');
+    });
+
+	context.subscriptions.push(disposable3);
+}
+
+function getWebviewContent(activity: string) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Coding</title>
+</head>
+<body>
+		<h1>${activity}</h1>
+    <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
+</body>
+</html>`;
 }
 
 // This method is called when your extension is deactivated

@@ -20,6 +20,11 @@
       {
         "command": "first-extension.another",
         "title": "Another"
+      },
+      {
+        "command": "catCoding.start",
+        "title": "Start new cat coding session",
+        "category": "Cat Coding"
       }
     ]
   },
@@ -28,7 +33,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint src --ext ts --fix",
     "test": "vscode-test"
   },
   "devDependencies": {
