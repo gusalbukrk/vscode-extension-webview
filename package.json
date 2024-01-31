@@ -24,6 +24,12 @@
           "command": "catCoding.insertLion",
           "when": "webviewId == 'catCoding' && webviewSection == 'editor'"
         }
+      ],
+      "commandPalette": [
+        {
+          "command": "catCoding.start",
+          "when": "activeWebviewPanelId != 'catCoding'"
+        }
       ]
     },
     "commands": [
