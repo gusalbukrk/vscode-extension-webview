@@ -165,6 +165,26 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable5);
+
+	// Virtual Documents - create readonly documents in Visual Studio Code from arbitrary sources
+	// https://code.visualstudio.com/api/extension-guides/virtual-documents
+	const myScheme = 'cowsay';
+	const myProvider = new (class implements vscode.TextDocumentContentProvider {
+		provideTextDocumentContent(uri: vscode.Uri): string {
+			return `moo... ${uri.path} moo...`;
+		}
+	})();
+	//
+	vscode.workspace.registerTextDocumentContentProvider(myScheme, myProvider);
+	//
+	vscode.commands.registerCommand('cowsay.say', async () => {
+		let what = await vscode.window.showInputBox({ placeHolder: 'cow say?' });
+		if (what) {
+			let uri = vscode.Uri.parse('cowsay:' + what);
+			let doc = await vscode.workspace.openTextDocument(uri); // calls back into the provider
+			await vscode.window.showTextDocument(doc, { preview: false });
+		}
+	});
 }
 
 function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vscode.Uri) {

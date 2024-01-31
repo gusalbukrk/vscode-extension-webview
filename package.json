@@ -65,6 +65,10 @@
         "command": "catCoding.reloadWindow",
         "title": "Reload the current window",
         "category": "Cat Coding"
+      },
+      {
+        "command": "cowsay.say",
+        "title": "Cow says..."
       }
     ]
   },
