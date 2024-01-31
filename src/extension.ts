@@ -152,6 +152,17 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		});
 	}
+
+	let disposable5 = vscode.commands.registerCommand('catCoding.reloadWindow', () => {
+		// The code you place here will be executed every time your command is executed
+		console.log('log from inside `reloadWindow` command implementation.');
+
+		// programmatically executes a command
+		// https://code.visualstudio.com/api/extension-guides/command#programmatically-executing-a-command
+		vscode.commands.executeCommand('workbench.action.reloadWindow');
+	});
+
+	context.subscriptions.push(disposable5);
 }
 
 function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vscode.Uri) {

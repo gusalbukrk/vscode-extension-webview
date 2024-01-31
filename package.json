@@ -54,6 +54,11 @@
         "command": "catCoding.doRefactor",
         "title": "Do some refactoring",
         "category": "Cat Coding"
+      },
+      {
+        "command": "catCoding.reloadWindow",
+        "title": "Reload the current window",
+        "category": "Cat Coding"
       }
     ]
   },
