@@ -66,6 +66,8 @@ export function activate(context: vscode.ExtensionContext) {
 							// default is current workspace and extension's install directory
 							// to disallow all local resources, just set to an empty array
 							localResourceRoots: [vscode.Uri.joinPath(context.extensionUri, 'src')],
+
+							enableCommandUris: true,
 						},
 					);
 
@@ -166,6 +168,18 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vscode.Uri) {
+	const linkUri = {
+		scheme: 'https',
+		path: '/',
+		authority: 'github.com',
+	};
+
+	const fileUri = {
+		scheme: 'file',
+		path: '/home/gusalbukrk/Dev/vscode-extension-webview/README.md',
+		authority: ''
+	};
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -206,6 +220,20 @@ function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vs
 						e.target.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, clientX: e.clientX, clientY: e.clientY }));
 						e.stopPropagation();
 				})(event)'>Create</button>
+
+		<br />
+
+		<!-- works, but bypasses VS Code's outgoing link protection
+		https://code.visualstudio.com/docs/editor/editingevolved#_outgoing-link-protection -->
+		<!-- <a href="https://github.com">GitHub</a> -->
+		<!-- -->
+		<!-- command URIs - links that execute a given command
+		https://code.visualstudio.com/api/extension-guides/command#command-uris -->
+		<a href="command:vscode.open?${encodeURIComponent(JSON.stringify(linkUri))}">open webpage</a>
+		<br />
+		<a href="command:vscode.open?${encodeURIComponent(JSON.stringify(fileUri))}">open file</a>
+		<br />
+		<a href="command:workbench.action.openGlobalSettings">open settings</a>
 
 		<script type="module">
 			// to see log output, open the developer tools in VS Code using
