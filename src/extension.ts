@@ -71,6 +71,9 @@ export function activate(context: vscode.ExtensionContext) {
 						},
 					);
 
+					// https://code.visualstudio.com/api/extension-guides/webview#passing-messages-from-a-webview-to-an-extension
+					currentPanel.webview.onDidReceiveMessage(e => console.log('received message from webview to extension'), undefined, context.subscriptions);
+
 					// to load resources or any content from the user's current workspace
 					// you must use the Webview.asWebviewUri function to convert a local `file:` URI
 					// into a special URI that VS Code can use to load a subset of local resources
@@ -112,6 +115,10 @@ export function activate(context: vscode.ExtensionContext) {
 					// 	context.subscriptions
 					// );
 				}
+
+			// https://code.visualstudio.com/api/extension-guides/webview#passing-messages-from-an-extension-to-a-webview
+			// https://code.visualstudio.com/api/references/vscode-api#Webview
+			setTimeout(() => currentPanel?.webview.postMessage({ command: 'changeTitleColor' }), 3000)
     });
 
 	context.subscriptions.push(disposable3);
@@ -143,6 +150,9 @@ export function activate(context: vscode.ExtensionContext) {
 					webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'src', 'cat.gif')),
 				);
 				currentPanel = webviewPanel;
+
+				// to also automatically change title color, when the panel is restored
+				setTimeout(() => currentPanel?.webview.postMessage({ command: 'changeTitleColor' }), 3000)
 
 				currentPanel.onDidDispose(
 					() => {
@@ -281,6 +291,7 @@ function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vs
 
 			// handle the message inside the webview
 			window.addEventListener('message', event => {
+					console.log('message event fired');
 
 					const message = event.data; // The JSON data our extension sent
 
@@ -288,6 +299,10 @@ function getWebviewContent(webview: vscode.Webview, activity: string, imgSrc: vs
 							case 'refactor':
 								vscode.setState({ title: vscode.getState().title + '!' });
 								document.querySelector('h1').textContent = vscode.getState().title;
+								break;
+							case 'changeTitleColor':
+								document.querySelector('h1').style.color = 'red';
+								vscode.postMessage("title color changed!");
 					}
 			});
 
